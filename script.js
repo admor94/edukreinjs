@@ -1,42 +1,42 @@
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Memeriksa apakah perangkat adalah perangkat kecil (mobile/tablet)
-        const isSmallDevice = window.matchMedia("(max-width: 768px)").matches;
+// Memeriksa apakah perangkat adalah perangkat kecil (mobile/tablet)
+const isSmallDevice = window.matchMedia("(max-width: 768px)").matches;
 
-        if (isSmallDevice) {
-            // Jika perangkat kecil, tambahkan event listener 'click'
-            const footnoteLinks = document.querySelectorAll('.footnote-link');
+if (isSmallDevice) {
+    // Jika perangkat kecil, tambahkan event listener 'click'
+    const footnoteLinks = document.querySelectorAll('.footnote-link');
+    
+    footnoteLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Mencegah default action (misalnya, melompat ke '#' di URL)
+
+            const tooltipId = link.getAttribute('aria-describedby');
+            const tooltip = document.getElementById(tooltipId);
             
-            footnoteLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-
-                    const tooltipId = link.getAttribute('aria-describedby');
-                    const tooltip = document.getElementById(tooltipId);
-                    
-                    if (tooltip.style.visibility === 'visible') {
-                        tooltip.style.visibility = 'hidden';
-                        tooltip.style.opacity = '0';
-                    } else {
-                        document.querySelectorAll('.tooltip-container').forEach(otherTooltip => {
-                            otherTooltip.style.visibility = 'hidden';
-                            otherTooltip.style.opacity = '0';
-                        });
-
-                        tooltip.style.visibility = 'visible';
-                        tooltip.style.opacity = '1';
-                    }
+            // Toggle (menyembunyikan/menampilkan) tooltip
+            if (tooltip.style.visibility === 'visible') {
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
+            } else {
+                // Sembunyikan semua tooltip lain yang mungkin terbuka
+                document.querySelectorAll('.tooltip-container').forEach(otherTooltip => {
+                    otherTooltip.style.visibility = 'hidden';
+                    otherTooltip.style.opacity = '0';
                 });
-            });
 
-            document.body.addEventListener('click', (event) => {
-                if (!event.target.closest('.footnote-link') && !event.target.closest('.tooltip-container')) {
-                    document.querySelectorAll('.tooltip-container').forEach(tooltip => {
-                        tooltip.style.visibility = 'hidden';
-                        tooltip.style.opacity = '0';
-                    });
-                }
+                // Tampilkan tooltip yang dipilih
+                tooltip.style.visibility = 'visible';
+                tooltip.style.opacity = '1';
+            }
+        });
+    });
+
+    // Menambahkan event listener ke body untuk menutup tooltip saat mengklik di luar
+    document.body.addEventListener('click', (event) => {
+        if (!event.target.closest('.footnote-link') && !event.target.closest('.tooltip-container')) {
+            document.querySelectorAll('.tooltip-container').forEach(tooltip => {
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
             });
         }
     });
-</script>
+}
