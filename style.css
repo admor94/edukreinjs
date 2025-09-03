@@ -1,4 +1,3 @@
-<style>
 /* --- [MODIFIKASI] Desain Accordion FAQ Unik --- */
 
 /* Kontainer utama dengan class baru kita */
@@ -85,4 +84,3 @@
 .tooltip-custom .tooltip-arrow::before {
   border-color: #333; /* Warna panah mengikuti background */
 }
-</style>
