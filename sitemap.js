@@ -48,24 +48,22 @@
       let count = posts.length;
 
       let section = document.createElement("div");
-      section.className = "accordion-section"; // Menambahkan kelas baru
+      section.className = "accordion-section";
       
       let header = document.createElement("button");
-      header.className = "accordion-header"; // Menambahkan kelas baru
+      header.className = "accordion-header";
       header.innerHTML = `${label} (${count})`;
       
       let content = document.createElement("div");
-      content.className = "accordion-content"; // Menambahkan kelas baru
+      content.className = "accordion-content";
 
-      // Membungkus tabel dengan div responsif
       let tableContainer = document.createElement("div");
       tableContainer.className = "responsive-table";
       
       let table = document.createElement("table");
-      // Menambahkan kelas dari CSS eksternal ke tabel
-      table.className = "static-page-table";
+      // MENGHAPUS BARIS INI: table.className = "static-page-table";
       
-      // Menggunakan kelas CSS untuk header tabel
+      // Menggunakan kelas CSS untuk header tabel, yang sekarang ditargetkan oleh CSS di luar JS
       let thead = `<thead class="table-header">
         <tr>
           <th>Judul</th>
