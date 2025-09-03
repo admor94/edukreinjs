@@ -1,7 +1,7 @@
 (function() {
-  const blogURL = "https://www.edukrein.com/"; // ganti kalau domain berbeda
-  const maxResults = 150; // jumlah post yang ditarik
-  const allowedLabels = ["Sosiologi", "Literasi Digital"]; // label yang ingin ditampilkan
+  const blogURL = "https://www.edukrein.com/";
+  const maxResults = 150;
+  const allowedLabels = ["Sosiologi", "Literasi Digital"];
 
   function fetchPosts(startIndex) {
     let script = document.createElement("script");
@@ -31,7 +31,6 @@
         });
       });
 
-      // kalau masih ada posting lanjutkan ambil
       if (entries.length === maxResults) {
         fetchPosts(startIndex + maxResults);
       } else {
@@ -49,52 +48,46 @@
       let count = posts.length;
 
       let section = document.createElement("div");
-      section.style.border = "1px solid #ccc";
-      section.style.marginBottom = "10px";
-      section.style.borderRadius = "6px";
-      section.style.overflow = "hidden";
-
+      section.className = "accordion-section"; // Menambahkan kelas baru
+      
       let header = document.createElement("button");
+      header.className = "accordion-header"; // Menambahkan kelas baru
       header.innerHTML = `${label} (${count})`;
-      header.style.width = "100%";
-      header.style.textAlign = "left";
-      header.style.padding = "10px";
-      header.style.background = "#f2f2f2";
-      header.style.border = "none";
-      header.style.cursor = "pointer";
-      header.style.fontWeight = "bold";
-
+      
       let content = document.createElement("div");
-      content.style.display = "none";
-      content.style.padding = "10px";
+      content.className = "accordion-content"; // Menambahkan kelas baru
 
+      // Membungkus tabel dengan div responsif
       let tableContainer = document.createElement("div");
-tableContainer.className = "responsive-table";
-let table = document.createElement("table");     
-      table.style.width = "100%";
-      table.style.borderCollapse = "collapse";
-
-      let thead = `<thead style="background:#f9f9f9;">
+      tableContainer.className = "responsive-table";
+      
+      let table = document.createElement("table");
+      // Menambahkan kelas dari CSS eksternal ke tabel
+      table.className = "static-page-table";
+      
+      // Menggunakan kelas CSS untuk header tabel
+      let thead = `<thead class="table-header">
         <tr>
-          <th style="border:1px solid #ddd; padding:6px;">Judul</th>
-          <th style="border:1px solid #ddd; padding:6px;">Penulis</th>
-          <th style="border:1px solid #ddd; padding:6px;">Tanggal</th>
-          <th style="border:1px solid #ddd; padding:6px;">Pembaharuan</th>
+          <th>Judul</th>
+          <th>Penulis</th>
+          <th>Tanggal</th>
+          <th>Pembaharuan</th>
         </tr>
       </thead>`;
 
       let rows = posts.map(p => `
         <tr>
-          <td style="border:1px solid #ddd; padding:6px;"><a href="${p.link}" target="_blank">${p.title}</a></td>
-          <td style="border:1px solid #ddd; padding:6px;">${p.author}</td>
-          <td style="border:1px solid #ddd; padding:6px;">${p.published}</td>
-          <td style="border:1px solid #ddd; padding:6px;">${p.updated}</td>
+          <td><a href="${p.link}" target="_blank">${p.title}</a></td>
+          <td>${p.author}</td>
+          <td>${p.published}</td>
+          <td>${p.updated}</td>
         </tr>
       `).join("");
 
       table.innerHTML = thead + "<tbody>" + rows + "</tbody>";
-
-      content.appendChild(table);
+      
+      tableContainer.appendChild(table);
+      content.appendChild(tableContainer);
 
       header.addEventListener("click", function() {
         content.style.display = (content.style.display === "none") ? "block" : "none";
@@ -106,6 +99,5 @@ let table = document.createElement("table");
     });
   }
 
-  // mulai fetch
   fetchPosts(1);
 })();
