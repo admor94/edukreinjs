@@ -1,42 +1,45 @@
-// Memeriksa apakah perangkat adalah perangkat kecil (mobile/tablet)
-const isSmallDevice = window.matchMedia("(max-width: 768px)").matches;
+document.addEventListener('DOMContentLoaded', () => {
+    // Objek berisi konten tooltip. Anda bisa menambah/mengubah di sini.
+    const footnotesData = {
+        'tooltip-1': 'Ini adalah isi dari catatan kaki atau referensi pertama. (Penulis, Tahun, Judul Buku)',
+        // Tambahkan catatan kaki lain di sini:
+        // 'tooltip-2': 'Isi catatan kaki kedua.',
+    };
 
-if (isSmallDevice) {
-    // Jika perangkat kecil, tambahkan event listener 'click'
     const footnoteLinks = document.querySelectorAll('.footnote-link');
-    
+
+    // Untuk setiap tautan catatan kaki, tambahkan fungsionalitas
     footnoteLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault(); // Mencegah default action (misalnya, melompat ke '#' di URL)
+        const tooltipId = link.getAttribute('aria-describedby');
+        const tooltipContent = footnotesData[tooltipId];
 
-            const tooltipId = link.getAttribute('aria-describedby');
-            const tooltip = document.getElementById(tooltipId);
-            
-            // Toggle (menyembunyikan/menampilkan) tooltip
-            if (tooltip.style.visibility === 'visible') {
-                tooltip.style.visibility = 'hidden';
-                tooltip.style.opacity = '0';
-            } else {
-                // Sembunyikan semua tooltip lain yang mungkin terbuka
-                document.querySelectorAll('.tooltip-container').forEach(otherTooltip => {
-                    otherTooltip.style.visibility = 'hidden';
-                    otherTooltip.style.opacity = '0';
+        if (tooltipContent) {
+            // Buat elemen tooltip
+            const tooltipContainer = document.createElement('div');
+            tooltipContainer.className = 'tooltip-container';
+            tooltipContainer.innerHTML = `<span class="tooltip-content">${tooltipContent}</span>`;
+
+            // Masukkan tooltip sebagai anak dari tautan catatan kaki
+            link.appendChild(tooltipContainer);
+
+            // Deteksi perangkat
+            const isSmallDevice = window.matchMedia("(max-width: 768px)").matches;
+
+            if (isSmallDevice) {
+                // Perilaku untuk perangkat kecil (klik)
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    tooltipContainer.classList.toggle('visible');
                 });
-
-                // Tampilkan tooltip yang dipilih
-                tooltip.style.visibility = 'visible';
-                tooltip.style.opacity = '1';
+            } else {
+                // Perilaku untuk perangkat besar (hover)
+                link.addEventListener('mouseenter', () => {
+                    tooltipContainer.classList.add('visible');
+                });
+                link.addEventListener('mouseleave', () => {
+                    tooltipContainer.classList.remove('visible');
+                });
             }
-        });
-    });
-
-    // Menambahkan event listener ke body untuk menutup tooltip saat mengklik di luar
-    document.body.addEventListener('click', (event) => {
-        if (!event.target.closest('.footnote-link') && !event.target.closest('.tooltip-container')) {
-            document.querySelectorAll('.tooltip-container').forEach(tooltip => {
-                tooltip.style.visibility = 'hidden';
-                tooltip.style.opacity = '0';
-            });
         }
     });
-}
+});
