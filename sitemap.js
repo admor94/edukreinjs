@@ -68,7 +68,9 @@
       content.style.display = "none";
       content.style.padding = "10px";
 
-      let table = document.createElement("table");
+      let tableContainer = document.createElement("div");
+tableContainer.className = "responsive-table";
+let table = document.createElement("table");     
       table.style.width = "100%";
       table.style.borderCollapse = "collapse";
 
