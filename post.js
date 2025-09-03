@@ -1,39 +1,47 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Objek berisi konten tooltip. Anda bisa menambah/mengubah di sini.
+    // Objek berisi konten tooltip. Tambahkan/ubah di sini.
     const footnotesData = {
-        'tooltip-1': 'Ini adalah isi dari catatan kaki atau referensi pertama. (Penulis, Tahun, Judul Buku)',
+        'tooltip-1': 'Ilmu murni (pure science) berfokus pada pengembangan teori dan pemahaman dasar, tanpa harus langsung diterapkan.',
+        'tooltip-2': 'Ilmu terapan (applied science) menggunakan teori-teori ilmiah untuk memecahkan masalah-masalah praktis di masyarakat.',
         // Tambahkan catatan kaki lain di sini:
-        // 'tooltip-2': 'Isi catatan kaki kedua.',
+        // 'tooltip-3': 'Isi catatan kaki ketiga.',
     };
 
     const footnoteLinks = document.querySelectorAll('.footnote-link');
 
-    // Untuk setiap tautan catatan kaki, tambahkan fungsionalitas
     footnoteLinks.forEach(link => {
         const tooltipId = link.getAttribute('aria-describedby');
         const tooltipContent = footnotesData[tooltipId];
 
         if (tooltipContent) {
-            // Buat elemen tooltip
             const tooltipContainer = document.createElement('div');
             tooltipContainer.className = 'tooltip-container';
             tooltipContainer.innerHTML = `<span class="tooltip-content">${tooltipContent}</span>`;
 
-            // Masukkan tooltip sebagai anak dari tautan catatan kaki
             link.appendChild(tooltipContainer);
 
-            // Deteksi perangkat
+            // Deteksi perangkat untuk interaksi yang berbeda
             const isSmallDevice = window.matchMedia("(max-width: 768px)").matches;
 
             if (isSmallDevice) {
-                // Perilaku untuk perangkat kecil (klik)
+                // Perilaku untuk perangkat sentuh (klik)
                 link.addEventListener('click', (event) => {
                     event.preventDefault();
+                    // Menutup tooltip lain sebelum menampilkan yang baru
+                    document.querySelectorAll('.tooltip-container.visible').forEach(t => t.classList.remove('visible'));
                     tooltipContainer.classList.toggle('visible');
                 });
+                // Tutup tooltip saat mengetuk area lain
+                document.addEventListener('click', (event) => {
+                    if (!link.contains(event.target)) {
+                        tooltipContainer.classList.remove('visible');
+                    }
+                });
             } else {
-                // Perilaku untuk perangkat besar (hover)
+                // Perilaku untuk desktop (hover)
                 link.addEventListener('mouseenter', () => {
+                    // Menutup tooltip lain saat hover
+                    document.querySelectorAll('.tooltip-container.visible').forEach(t => t.classList.remove('visible'));
                     tooltipContainer.classList.add('visible');
                 });
                 link.addEventListener('mouseleave', () => {
