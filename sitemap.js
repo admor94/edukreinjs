@@ -1,4 +1,5 @@
 // Ini digunakan dalam postingan - dipanggil melalui URL
+// <script src='https://admor94.github.io/edukreinjs/sitemap.js'></script>
 
 (function() {
   const blogURL = "https://www.edukrein.com/";
