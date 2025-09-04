@@ -1,3 +1,5 @@
+// Ini digunakan dalam postingan - dipanggil melalui URL
+
 (function() {
   const blogURL = "https://www.edukrein.com/";
   const maxResults = 150;
